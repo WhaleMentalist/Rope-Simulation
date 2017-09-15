@@ -1,12 +1,12 @@
 #include "../../include/core/Spring.h"
 
-Spring::Spring(float stiffness, float dampening, float restLength, Particle p1, Particle p2)
+Spring::Spring(float stiffness, float dampening, float restLength, Particle& p1, Particle& p2)
 {
     _k = stiffness;
     _kd = dampening;
     _restLength = restLength;
-    _endPointOne = new Particle(p1);
-    _endPointTwo = new Particle(p2);
+    _endPointOne = &p1;
+    _endPointTwo = &p2;
 }
 
 void Spring::simulate(float deltaTime)

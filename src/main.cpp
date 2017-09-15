@@ -23,15 +23,15 @@ const char* fragmentShaderSource = "#version 330 core\n"
 const unsigned int SCREEN_WIDTH = 800;
 const unsigned int SCREEN_HEIGHT = 600;
 
-Particle* massOne = new Particle(1.0f, Vector3D(), Vector3D(10.0f, 0.0f, 0.0f), Vector3D());
-Particle* massTwo = new Particle(1.0f, Vector3D(-0.25f, 0.0f, 0.0f), Vector3D(0.0f, 0.0f, 0.0f), Vector3D());
-Spring* spring = new Spring(0.8f, 0.2f, 5.0f, *(massOne), *(massTwo));
+Particle* massOne = new Particle(1.0f, Vector3D(-0.25f, 0.0f, 0.0f), Vector3D(-2.0f, 0.0f, 0.0f), Vector3D());
+Particle* massTwo = new Particle(1.0f, Vector3D(0.25f, 0.0f, 0.0f), Vector3D(2.0f, 0.0f, 0.0f), Vector3D());
+Spring* spring = new Spring(0.99f, 0.1f, 2.0f, *(massOne), *(massTwo));
 
 void windowResizeCallback(GLFWwindow *window, int width, int height);
 
 void processInput(GLFWwindow* window);
 
-int main(void)
+int main()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -96,22 +96,36 @@ int main(void)
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
+    float positions[] = {
+        massOne->getPosition()._x,
+        massOne->getPosition()._y,
+        massOne->getPosition()._z,
+        massTwo->getPosition()._x,
+        massTwo->getPosition()._y,
+        massTwo->getPosition()._z
+    };
+
     unsigned int VBO, VAO;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(POSITION), POSITION, GL_DYNAMIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_DYNAMIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
-
-    float* positions = new float[2 * sizeof(Vector3D)];
 
     while(!(glfwWindowShouldClose(window)))
     {
-        spring->simulate(0.001f);
+        spring->simulate(0.01f);
 
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(POSITION), POSITION);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(positions), positions);
+        positions[0] = massOne->getPosition()._x;
+        positions[1] = massOne->getPosition()._y;
+        positions[2] = massOne->getPosition()._z;
+
+        positions[3] = massTwo->getPosition()._x;
+        positions[4] = massTwo->getPosition()._y;
+        positions[5] = massTwo->getPosition()._z;
 
         processInput(window);
 
@@ -120,7 +134,7 @@ int main(void)
         glUseProgram(shader);
         glBindVertexArray(VAO);
         glPointSize(10.0f);
-        glDrawArrays(GL_POINTS, 0, 1);
+        glDrawArrays(GL_POINTS, 0, 2);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }

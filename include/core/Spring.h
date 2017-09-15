@@ -9,11 +9,11 @@ class Spring : public PNode
     public:
 
         Spring(float stiffness, float dampening, float restLength,
-                Particle p1, Particle p2);
+                Particle& p1, Particle& p2);
 
-        virtual void simulate(float deltaTime) override;
+        void simulate(float deltaTime) override;
 
-        virtual void applyForce(Vector3D force) override;
+        void applyForce(Vector3D force) override;
 
         void print();
 
