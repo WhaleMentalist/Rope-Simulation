@@ -1,50 +1,47 @@
+#include<iostream>
+
 #include "../../include/core/Spring.h"
 
-Spring::Spring(float stiffness, float dampening, float restLength, Particle& p1, Particle& p2)
+Spring::Spring(float stiffness, float dampening, float restLength, PNode* p1, PNode* p2)
 {
     _k = stiffness;
     _kd = dampening;
     _restLength = restLength;
-    _endPointOne = &p1;
-    _endPointTwo = &p2;
+    _endPoints[0] = p1;
+    _endPoints[1] = p2;
 }
 
 void Spring::simulate(float deltaTime)
 {
     solve();
-    _endPointOne->simulate(deltaTime);
-    _endPointTwo->simulate(deltaTime);
-}
-
-void Spring::applyForce(Vector3D force)
-{
-
+    _endPoints[0]->simulate(deltaTime);
+    _endPoints[1]->simulate(deltaTime);
 }
 
 void Spring::print()
 {
     std::cout << "First mass: " << "\n";
-    _endPointOne->print();
+    _endPoints[0]->print();
     std::cout << "Second mass: " << "\n";
-    _endPointTwo->print();
+    _endPoints[1]->print();
 }
 
 void Spring::solve()
 {
-    /*
-     * Need to check if particles are locked or have infinite mass...
-     */
-
-    Vector3D displacement = _endPointOne->getPosition() - _endPointTwo->getPosition();
-    float displacementMag = displacement.magnitude(); // Get magnitude via 'sqrt' of sum of components squared
+    // Get distance between two end points and the magnitude squared
+    Vector3D endPointDistVector = _endPoints[0]->getPosition() - _endPoints[1]->getPosition();
+    float endPointDistMag = endPointDistVector.magnitude(); // TODO: Could do first order taylor series approx of 'sqrt'
+    Vector3D endPointDistNorm = endPointDistVector / endPointDistMag;
 
     Vector3D force;
 
-    if(displacementMag != 0.0f) // Need better way to compare 'float'
+    if(endPointDistMag != 0.0f)
     {
-        force += -(displacement / displacementMag) * (displacementMag - _restLength) * _k;
-        force += -(_endPointOne->getVelocity() - _endPointTwo->getVelocity()) * _kd;
-        _endPointOne->applyForce(force);
-        _endPointTwo->applyForce(-force);
+        force += -(endPointDistNorm * (endPointDistMag - _restLength)) * _k; // Spring force
+        force +=  endPointDistNorm *
+                (endPointDistNorm * (_endPoints[0]->getVelocity() - _endPoints[1]->getVelocity())) * -_kd;
     }
+
+    _endPoints[0]->applyForce(force);
+    _endPoints[1]->applyForce(-force);
 }

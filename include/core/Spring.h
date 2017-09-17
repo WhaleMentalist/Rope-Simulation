@@ -1,25 +1,25 @@
 #ifndef PHYSICS_ENGINE_SPRING_H
 #define PHYSICS_ENGINE_SPRING_H
 
+#include "CNode.h"
 #include "PNode.h"
-#include "Particle.h"
 
-class Spring : public PNode
+class Spring : public CNode
 {
     public:
 
         Spring(float stiffness, float dampening, float restLength,
-                Particle& p1, Particle& p2);
+                PNode* p1, PNode* p2);
 
         void simulate(float deltaTime) override;
-
-        void applyForce(Vector3D force) override;
 
         void print();
 
     private:
 
-        virtual void solve();
+        void solve() override;
+
+        const static unsigned int NUM_POINTS = 2;
 
         float _k;
 
@@ -27,9 +27,7 @@ class Spring : public PNode
 
         float _restLength;
 
-        Particle* _endPointOne;
-
-        Particle* _endPointTwo;
+        PNode* _endPoints[NUM_POINTS];
 };
 
 #endif //PHYSICS_ENGINE_SPRING_H

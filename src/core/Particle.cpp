@@ -6,6 +6,7 @@ Particle::Particle(float mass)
     _position = new Vector3D(0.0f, 0.0f, 0.0f);
     _velocity = new Vector3D(0.0f, 0.0f, 0.0f);
     _force = new Vector3D(0.0f, 0.0f, 0.0f);
+    _isLocked = false;
 }
 
 Particle::Particle(float mass, Vector3D position, Vector3D velocity, Vector3D force)
@@ -14,6 +15,7 @@ Particle::Particle(float mass, Vector3D position, Vector3D velocity, Vector3D fo
     _position = new Vector3D(position);
     _velocity = new Vector3D(velocity);
     _force = new Vector3D(force);
+    _isLocked = false;
 }
 
 Particle::Particle(const Particle& p)
@@ -22,6 +24,7 @@ Particle::Particle(const Particle& p)
     _position = new Vector3D(*(p._position));
     _velocity = new Vector3D(*(p._velocity));
     _force = new Vector3D(*(p._force));
+    _isLocked = false;
 }
 
 Particle::~Particle()
@@ -31,11 +34,6 @@ Particle::~Particle()
     delete _position;
 }
 
-Vector3D Particle::getPosition()
-{
-    return *(_position);
-}
-
 Vector3D Particle::getVelocity()
 {
     return *(_velocity);
@@ -43,21 +41,27 @@ Vector3D Particle::getVelocity()
 
 void Particle::applyForce(const Vector3D force)
 {
-    *(_force) += force; // Simply add to the current force
+    if(!_isLocked)
+    {
+        *(_force) += force; // Simply add to the current force
+    }
 }
 
 void Particle::simulate(float deltaTime)
 {
-    Vector3D acceleration = *(_force) * _inverseMass; // Acceleration = Force / Mass
-    *(_velocity) += acceleration * deltaTime; // Add the affects of acceleration during time step
-    *(_position) += *(_velocity) * deltaTime; // Add the affects of the velocity during time step
+    if(!_isLocked)
+    {
+        Vector3D acceleration = *(_force) * _inverseMass; // Acceleration = Force / Mass
+        *(_velocity) += acceleration * deltaTime; // Add the affects of acceleration during time step
+        *(_position) += *(_velocity) * deltaTime; // Add the affects of the velocity during time step
 
-    /*
-     * Zero the force after simulation step
-     */
-    _force->_x = 0.0f;
-    _force->_y = 0.0f;
-    _force->_z = 0.0f;
+        /*
+         * Zero the force after simulation step
+         */
+        _force->_x = 0.0f;
+        _force->_y = 0.0f;
+        _force->_z = 0.0f;
+    }
 }
 
 void Particle::print()

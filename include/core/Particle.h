@@ -1,5 +1,5 @@
-#ifndef PHYSICS_ENGINE_KINEMATICNODE_H
-#define PHYSICS_ENGINE_KINEMATICNODE_H
+#ifndef PHYSICS_ENGINE_PARTICLE_H
+#define PHYSICS_ENGINE_PARTICLE_H
 
 #include<iostream>
 
@@ -17,13 +17,11 @@ class Particle : public PNode
 
         ~Particle();
 
-        Vector3D getPosition();
+        Vector3D getVelocity() override;
 
-        Vector3D getVelocity();
+        void applyForce(const Vector3D force) override;
 
-        virtual void applyForce(const Vector3D force) override;
-
-        virtual void simulate(float deltaTime) override;
+        void simulate(float deltaTime) override;
 
         void print();
 
@@ -35,4 +33,4 @@ class Particle : public PNode
 
 };
 
-#endif //PHYSICS_ENGINE_KINEMATICNODE_H
+#endif //PHYSICS_ENGINE_PARTICLE_H
