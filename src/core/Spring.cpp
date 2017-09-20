@@ -18,14 +18,6 @@ void Spring::simulate(float deltaTime)
     _endPoints[1]->simulate(deltaTime);
 }
 
-void Spring::print()
-{
-    std::cout << "First mass: " << "\n";
-    _endPoints[0]->print();
-    std::cout << "Second mass: " << "\n";
-    _endPoints[1]->print();
-}
-
 void Spring::solve()
 {
     // Get distance between two end points and the magnitude squared
@@ -39,7 +31,7 @@ void Spring::solve()
     {
         force += -(endPointDistNorm * (endPointDistMag - _restLength)) * _k; // Spring force
         force +=  endPointDistNorm *
-                (endPointDistNorm * (_endPoints[0]->getVelocity() - _endPoints[1]->getVelocity())) * -_kd;
+                (endPointDistNorm * (_endPoints[0]->getVelocity() - _endPoints[1]->getVelocity())) * -_kd; // Dampening
     }
 
     _endPoints[0]->applyForce(force);

@@ -17,19 +17,11 @@ class Particle : public PNode
 
         ~Particle();
 
-        Vector3D getVelocity() override;
-
         void applyForce(const Vector3D force) override;
 
         void simulate(float deltaTime) override;
 
-        void print();
-
     protected:
-
-        Vector3D* _velocity;
-
-        Vector3D* _force;
 
 };
 

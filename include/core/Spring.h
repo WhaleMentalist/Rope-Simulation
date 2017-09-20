@@ -13,8 +13,6 @@ class Spring : public CNode
 
         void simulate(float deltaTime) override;
 
-        void print();
-
     private:
 
         void solve() override;

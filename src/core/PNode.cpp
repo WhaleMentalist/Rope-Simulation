@@ -2,7 +2,12 @@
 
 Vector3D PNode::getPosition()
 {
-    return *(_position);
+    return _position;
+}
+
+Vector3D PNode::getVelocity()
+{
+    return _velocity;
 }
 
 void PNode::lock()

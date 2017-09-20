@@ -23,7 +23,7 @@ const char* fragmentShaderSource = "#version 330 core\n"
 const unsigned int SCREEN_WIDTH = 800;
 const unsigned int SCREEN_HEIGHT = 600;
 
-const unsigned int NUM_MASSES = 20;
+const unsigned int NUM_MASSES = 18;
 
 const float ROPE_START = 0.0f;
 
@@ -156,7 +156,7 @@ void setupWorld()
 
     for(int i = 0; i < NUM_MASSES - 1; ++i)
     {
-        springs[i] = new Spring(19620.0f, 30.0f, 0.05f, masses[i], masses[i + 1]);
+        springs[i] = new Spring(800.0f, 0.1f, 0.05f, masses[i], masses[i + 1]);
     }
 }
 
@@ -164,8 +164,7 @@ void update()
 {
     for(int i = 0; i < NUM_MASSES; ++i)
     {
-        masses[i]->applyForce(Vector3D(0.0f, -9.81f, 0.0f));
-        masses[i]->applyForce(masses[i]->getVelocity() * -0.3f); // Apply Drag
+        masses[i]->applyForce(Vector3D(0.0f, -9.81f * 0.1f, 0.0f));
     }
 
     for(int i = 0; i < NUM_MASSES - 1; ++i)
@@ -202,6 +201,6 @@ void processInput(GLFWwindow* window)
     }
     else if(glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
     {
-        masses[NUM_MASSES - 1]->applyForce(Vector3D(100.0f, 0.0f, 0.0f));
+        masses[NUM_MASSES - 1]->applyForce(Vector3D(10.0f, 0.0f, 0.0f));
     }
 }
