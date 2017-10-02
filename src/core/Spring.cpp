@@ -27,7 +27,7 @@ void Spring::solve()
 
     Vector3D force;
 
-    if(endPointDistMag != 0.0f)
+    if(endPointDistMag != 0.0f && endPointDistMag > _restLength)
     {
         force += -(endPointDistNorm * (endPointDistMag - _restLength)) * _k; // Spring force
         force +=  endPointDistNorm *

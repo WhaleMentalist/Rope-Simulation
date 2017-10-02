@@ -23,9 +23,9 @@ const char* fragmentShaderSource = "#version 330 core\n"
 const unsigned int SCREEN_WIDTH = 800;
 const unsigned int SCREEN_HEIGHT = 600;
 
-const unsigned int NUM_MASSES = 18;
+const unsigned int NUM_MASSES = 25;
 
-const float ROPE_START = 0.0f;
+const float ROPE_START = -0.5f;
 
 Particle* masses[NUM_MASSES];
 Spring* springs[NUM_MASSES - 1];
@@ -145,7 +145,7 @@ void setupWorld()
 {
     for(int i = 0; i < NUM_MASSES; ++i)
     {
-        masses[i] = new Particle(0.1f, Vector3D(ROPE_START + (0.05f * i), 0.5f, 0.0f), Vector3D(0.0f, 0.0f, 0.0f),
+        masses[i] = new Particle(0.1f, Vector3D(ROPE_START + (0.05f * i), 0.9f, 0.0f), Vector3D(0.0f, 0.0f, 0.0f),
                                      Vector3D(0.0f, 0.0f, 0.0f));
 
         positions[(i * 3)] = masses[(i * 3) / 3]->getPosition()._x;
@@ -156,7 +156,7 @@ void setupWorld()
 
     for(int i = 0; i < NUM_MASSES - 1; ++i)
     {
-        springs[i] = new Spring(800.0f, 0.1f, 0.05f, masses[i], masses[i + 1]);
+        springs[i] = new Spring(1200.0f, 0.1f, 0.05f, masses[i], masses[i + 1]);
     }
 }
 
@@ -169,7 +169,7 @@ void update()
 
     for(int i = 0; i < NUM_MASSES - 1; ++i)
     {
-        springs[i]->simulate(0.0016f);
+        springs[i]->simulate(0.0008f);
     }
 
     for(int i = 0; i < NUM_MASSES * 3; i+=3)
