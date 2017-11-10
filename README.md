@@ -1,2 +1,2 @@
 # Rope-Simulation
-![Output sample](https://github.com/WhaleMentalist/Rope-Simulation/tree/master/resources/example.mp4)
+![Output sample](https://github.com/WhaleMentalist/Rope-Simulation/tree/master/resources/rope.gif)
