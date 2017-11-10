@@ -1,2 +1,1 @@
-# Rope-Simulation
-![](https://github.com/WhaleMentalist/Rope-Simulation/tree/master/resources/rope.gif)
+![Alt](https://media.giphy.com/media/xT1Ra2gohUyjK7CONq/giphy.gif)
