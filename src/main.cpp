@@ -169,7 +169,7 @@ void update()
 
     for(int i = 0; i < NUM_MASSES - 1; ++i)
     {
-        springs[i]->simulate(0.0008f);
+        springs[i]->simulate(0.0060);
     }
 
     for(int i = 0; i < NUM_MASSES * 3; i+=3)

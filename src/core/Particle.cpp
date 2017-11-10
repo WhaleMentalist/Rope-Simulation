@@ -49,7 +49,7 @@ void Particle::simulate(float deltaTime)
         Vector3D acceleration = _force * _inverseMass; // Acceleration = Force / Mass
         _velocity = _position - _previousPosition;
         _previousPosition = _position;
-        _position = _position + _velocity * 0.999f + (acceleration * deltaTime * deltaTime);
+        _position = _position + _velocity * 0.995f + (acceleration * deltaTime * deltaTime);
 
         /*
          * Zero the force after simulation step
